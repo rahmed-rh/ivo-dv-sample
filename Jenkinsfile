@@ -78,23 +78,29 @@ pipeline {
 				}
 			}
 		}
-		node('maven') {
-			stage('Deploy Teiid Application') {
-				steps {
-					script {
-						openshift.withCluster() {
-							//openshift.verbose() // set logging level for subsequent operations executed (loglevel=8)
-							openshift.withProject("${env.NAMESPACE}") {
-								// Get some code from a GitHub repository
-								git branch: "master", url: "https: //github.com/rahmed-rh/ivo-dv-sample"
-								// Run the maven build
-								sh "mvn clean install -Popenshift -Dfabric8.namespace=${env.NAMESPACE}"
 
-							}
+		stage('Deploy Teiid Application') {
+			agent {
+				node {
+					label 'maven'
+				}
+			}
+			steps {
+				script {
+					openshift.withCluster() {
+						//openshift.verbose() // set logging level for subsequent operations executed (loglevel=8)
+						openshift.withProject("${env.NAMESPACE}") {
+							// Get some code from a GitHub repository
+							git branch: "master",
+							url: "https: //github.com/rahmed-rh/ivo-dv-sample"
+							// Run the maven build
+							sh "mvn clean install -Popenshift -Dfabric8.namespace=${env.NAMESPACE}"
+
 						}
 					}
 				}
 			}
 		}
+
 	}
 }
