@@ -13,11 +13,11 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 --
-INSERT INTO CUSTOMER (ID,SSN,NAME) VALUES (10, 'CST01002','Joseph Smith');
-INSERT INTO CUSTOMER (ID,SSN,NAME) VALUES (11, 'CST01003','Nicholas Ferguson');
-INSERT INTO CUSTOMER (ID,SSN,NAME) VALUES (12, 'CST01004','Jane Aire');
+INSERT INTO CUSTOMER (ID,SSN,NAME) VALUES (20, 'CST01005','db2 Alan de Young');
+INSERT INTO CUSTOMER (ID,SSN,NAME) VALUES (21, 'CST01006','db2 Andria Tarocchi');
+INSERT INTO CUSTOMER (ID,SSN,NAME) VALUES (22, 'CST01007','db2 Ahmed Ali');
 
-INSERT INTO ADDRESS (ID, STREET, ZIP, CUSTOMER_ID) VALUES (10, 'Main St', '12345', 10);
+INSERT INTO ADDRESS (ID, STREET, ZIP, CUSTOMER_ID) VALUES (20, 'DB2 Address', '12345', 20);
 
 commit;
 

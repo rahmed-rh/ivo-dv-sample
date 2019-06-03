@@ -15,15 +15,23 @@ CREATE FOREIGN DATA WRAPPER mysql5;
 CREATE SERVER db2 TYPE 'NONE' FOREIGN DATA WRAPPER postgresql OPTIONS ("jndi-name" 'db2');
 
 -- create schema, then import the metadata from the PostgreSQL database
-CREATE SCHEMA accounts SERVER db1;
+CREATE SCHEMA accountsdb1 SERVER db1;
+CREATE SCHEMA accountsdb2 SERVER db2;
 CREATE VIRTUAL SCHEMA portfolio;
 
-SET SCHEMA accounts;
-IMPORT FOREIGN SCHEMA public FROM SERVER db1 INTO accounts OPTIONS("importer.useFullSchemaName" 'false');
+SET SCHEMA accountsdb1;
+IMPORT FOREIGN SCHEMA public FROM SERVER db1 INTO accountsdb1 OPTIONS("importer.useFullSchemaName" 'false', importer.tableTypes 'TABLE');
+
+SET SCHEMA accountsdb2;
+IMPORT FOREIGN SCHEMA public FROM SERVER db2 INTO accountsdb2 OPTIONS("importer.useFullSchemaName" 'false', importer.tableTypes 'TABLE');
 
 SET SCHEMA portfolio;
 
 CREATE VIEW CustomerZip(id bigint PRIMARY KEY, name string, ssn string, zip string) AS 
-    SELECT c.ID as id, c.NAME as name, c.SSN as ssn, a.ZIP as zip 
-    FROM accounts.CUSTOMER c LEFT OUTER JOIN accounts.ADDRESS a 
-    ON c.ID = a.CUSTOMER_ID;   
+    SELECT c1.ID as id, c1.NAME as name, c1.SSN as ssn, a1.ZIP as zip 
+    FROM accountsdb1.CUSTOMER c1 LEFT OUTER JOIN accountsdb1.ADDRESS a1 
+    ON c1.ID = a1.CUSTOMER_ID
+    UNION 
+    SELECT c2.ID as id, c2.NAME as name, c2.SSN as ssn, a2.ZIP as zip 
+    FROM accountsdb2.CUSTOMER c2 LEFT OUTER JOIN accountsdb2.ADDRESS a2 
+    ON c2.ID = a2.CUSTOMER_ID
